@@ -32,7 +32,7 @@ public class GeminiService {
 		
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		headers.setAccept(List.of(MediaType.APPLICATION_JSON));
-		headers.set("Authorization", "Bearer " + geminiToken);
+		//headers.set("Authorization", "Bearer " + geminiToken);
 		
 		String body = String.format(""" 
 				{
@@ -45,7 +45,7 @@ public class GeminiService {
 				  },
 				  "contents": [
 					{
-					  "role": "user"
+					  "role": "user",
 					  "parts": [
 						{
 						  "text": "$s"
@@ -58,7 +58,9 @@ public class GeminiService {
 		
 		HttpEntity<String> entity = new HttpEntity<>(body, headers);
 		
-		ResponseEntity<String> response = restTemplate.exchange(geminiUrl, HttpMethod.POST, entity, String.class);
+		String urlWithToken = geminiUrl + geminiToken;
+		
+		ResponseEntity<String> response = restTemplate.exchange(urlWithToken, HttpMethod.POST, entity, String.class);
 		
 		String responseBody = response.getBody();
 		
