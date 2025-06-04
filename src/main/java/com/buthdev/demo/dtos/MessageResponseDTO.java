@@ -1,15 +1,7 @@
 package com.buthdev.demo.dtos;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import java.util.List;
 
-@Getter
-@Setter
-@AllArgsConstructor
-@NoArgsConstructor
-public class MessageResponseDTO {
+public record MessageResponseDTO(List<CandidateDTO> candidates, ContentDTO content, PartDTO parts) {
 
-	private String text;
 }

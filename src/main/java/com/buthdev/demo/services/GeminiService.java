@@ -48,7 +48,7 @@ public class GeminiService {
 					  "role": "user",
 					  "parts": [
 						{
-						  "text": "$s"
+						  "text": "%s"
 						}
 					]
 				}
