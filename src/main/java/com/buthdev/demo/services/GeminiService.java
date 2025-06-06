@@ -23,7 +23,7 @@ public class GeminiService {
 	@Value("${GEMINI_URL}")
 	private String geminiUrl;
 	
-	@Value("${GOOGLE_API_KEY}")
+	@Value("${GEMINI_TOKEN}")
 	private String geminiToken;
 	
 	RestTemplate restTemplate = new RestTemplate();
