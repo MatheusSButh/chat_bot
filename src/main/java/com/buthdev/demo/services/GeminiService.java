@@ -1,6 +1,5 @@
 package com.buthdev.demo.services;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,14 +10,14 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import com.buthdev.demo.builders.GeminiRequestBuilder;
 import com.buthdev.demo.dtos.MessageResponseDTO;
 import com.buthdev.demo.dtos.MessageTurn;
+import com.buthdev.demo.exceptions.AICommunicationException;
 import com.google.gson.Gson;
-
-import jakarta.servlet.http.HttpSession;
 
 @Service
 public class GeminiService {
@@ -69,6 +68,8 @@ public class GeminiService {
 	
 	public MessageResponseDTO callMessage (String message, List<MessageTurn> historic) {
 		
+		try {
+			
 		HttpHeaders headers = new HttpHeaders();
 		
 		headers.setContentType(MediaType.APPLICATION_JSON);
@@ -85,5 +86,10 @@ public class GeminiService {
 		MessageResponseDTO messageResponseDTO = gson.fromJson(responseBody, MessageResponseDTO.class);
 		
 		return messageResponseDTO;
+		}
+		
+		catch(HttpClientErrorException e) {
+			throw new AICommunicationException();
+		}
 	}
 }
