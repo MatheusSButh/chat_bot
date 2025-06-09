@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import com.buthdev.demo.dtos.MessageTurn;
+import com.buthdev.demo.dtos.request.MessageTurn;
 
 import jakarta.servlet.http.HttpSession;
 

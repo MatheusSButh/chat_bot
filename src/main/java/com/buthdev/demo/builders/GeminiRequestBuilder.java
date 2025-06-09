@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Component;
 
-import com.buthdev.demo.dtos.MessageTurn;
+import com.buthdev.demo.dtos.request.MessageTurn;
 import com.google.gson.Gson;
 
 @Component

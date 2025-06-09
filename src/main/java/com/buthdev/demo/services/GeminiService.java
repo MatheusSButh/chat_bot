@@ -14,8 +14,8 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import com.buthdev.demo.builders.GeminiRequestBuilder;
-import com.buthdev.demo.dtos.MessageResponseDTO;
-import com.buthdev.demo.dtos.MessageTurn;
+import com.buthdev.demo.dtos.request.MessageTurn;
+import com.buthdev.demo.dtos.response.MessageResponseDTO;
 import com.buthdev.demo.exceptions.AICommunicationException;
 import com.google.gson.Gson;
 

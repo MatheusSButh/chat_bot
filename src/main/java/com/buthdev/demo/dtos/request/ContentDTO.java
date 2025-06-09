@@ -1,4 +1,4 @@
-package com.buthdev.demo.dtos;
+package com.buthdev.demo.dtos.request;
 
 import java.util.List;
 

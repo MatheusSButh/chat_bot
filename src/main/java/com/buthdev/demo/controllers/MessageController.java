@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.buthdev.demo.dtos.MessageDTO;
-import com.buthdev.demo.dtos.MessageResponseDTO;
-import com.buthdev.demo.dtos.MessageTurn;
+import com.buthdev.demo.dtos.request.MessageDTO;
+import com.buthdev.demo.dtos.request.MessageTurn;
+import com.buthdev.demo.dtos.response.MessageResponseDTO;
 import com.buthdev.demo.services.GeminiService;
 import com.buthdev.demo.services.MessageHistoricService;
 
