@@ -34,7 +34,7 @@ public class MessageController {
 		
 		historic.add(new MessageTurn("user", messageDTO.message()));
         historic.add(new MessageTurn("model", messageResponse));
-        session.setAttribute("chatHistoric", historic);
+        geminiService.saveHistoric(session, historic);
 		
 		return ResponseEntity.ok().body(messageResponse);
 	}

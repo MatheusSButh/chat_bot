@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import com.buthdev.demo.builders.GeminiRequestBuilder;
 import com.buthdev.demo.dtos.MessageResponseDTO;
 import com.buthdev.demo.dtos.MessageTurn;
 import com.google.gson.Gson;
@@ -28,7 +30,11 @@ public class GeminiService {
 	@Value("${GEMINI_TOKEN}")
 	private String geminiToken;
 	
+	@Autowired
+	GeminiRequestBuilder geminiRequestBuilder;
+	
 	RestTemplate restTemplate = new RestTemplate();
+	Gson gson = new Gson();
 	
 	private static final String SYSTEM_INSTRUCTION_TEXT = """
             Você é o **BarberBot**, o assistente virtual de agendamentos da **Barbearia X**. Seu principal objetivo é ajudar os clientes a:
@@ -61,6 +67,7 @@ public class GeminiService {
             Lembre-se, BarberBot, seu papel é facilitar ao máximo o processo de agendamento para os clientes da Barbearia X, garantindo que todas as informações necessárias sejam coletadas e confirmadas.
             """;
 	
+	
 	public MessageResponseDTO callMessage (String message, List<MessageTurn> historic) {
 		
 		HttpHeaders headers = new HttpHeaders();
@@ -68,31 +75,7 @@ public class GeminiService {
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		headers.setAccept(List.of(MediaType.APPLICATION_JSON));
 		
-		
-		
-		List<Map<String, Object>> contents = new ArrayList<>();
-		
-		if (historic != null) {
-			historic.forEach(turn -> contents.add(Map.of(
-					"role", turn.role(), 
-					"parts", List.of(Map.of("text", turn.text()))
-					)));
-		}
-		
-		contents.add(Map.of(
-	            "role", "user",
-	            "parts", List.of(Map.of("text", message))
-	        ));
-		
-		Map<String, Object> systemInstruction = Map.of("parts", List.of(Map.of("text", SYSTEM_INSTRUCTION_TEXT)));
-		
-		Map<String, Object> requestPayload = Map.of(
-	            "systemInstruction", systemInstruction,
-	            "contents", contents
-	        );
-		
-		Gson gson = new Gson();
-		String body = gson.toJson(requestPayload);
+		String body = geminiRequestBuilder.buildRequest(historic, message, SYSTEM_INSTRUCTION_TEXT);
 		
 		HttpEntity<String> entity = new HttpEntity<>(body, headers);
 		
@@ -109,9 +92,15 @@ public class GeminiService {
 	public List<MessageTurn> getHistoric(HttpSession session) {
         @SuppressWarnings("unchecked")
 		List<MessageTurn> historic = (List<MessageTurn>) session.getAttribute("chatHistoric");
+        
         if (historic == null) {
             return new ArrayList<>();
         }
+        
         return historic;
     }
+	
+	public void saveHistoric(HttpSession session, List<MessageTurn> historic) {
+		session.setAttribute("chatHistoric", historic);
+	}
 }
