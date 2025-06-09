@@ -13,6 +13,7 @@ import com.buthdev.demo.dtos.MessageDTO;
 import com.buthdev.demo.dtos.MessageResponseDTO;
 import com.buthdev.demo.dtos.MessageTurn;
 import com.buthdev.demo.services.GeminiService;
+import com.buthdev.demo.services.MessageHistoricService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -23,18 +24,19 @@ public class MessageController {
 	@Autowired
 	GeminiService geminiService;
 	
+	@Autowired
+	MessageHistoricService messageHistoricService;
+	
 	@GetMapping(value = "/send")
 	public ResponseEntity<String> callGemini(@RequestBody MessageDTO messageDTO, HttpSession session) {
 		
-		List<MessageTurn> historic = geminiService.getHistoric(session);
+		List<MessageTurn> historic = messageHistoricService.getHistoric(session);
 		
         MessageResponseDTO response = geminiService.callMessage(messageDTO.message(), historic);
         
 		String messageResponse = response.candidates().getFirst().content().parts().getFirst().text();
 		
-		historic.add(new MessageTurn("user", messageDTO.message()));
-        historic.add(new MessageTurn("model", messageResponse));
-        geminiService.saveHistoric(session, historic);
+        messageHistoricService.saveHistoric(session, historic, messageDTO.message(), messageResponse);
 		
 		return ResponseEntity.ok().body(messageResponse);
 	}

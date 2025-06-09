@@ -2,7 +2,6 @@ package com.buthdev.demo.services;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -86,21 +85,5 @@ public class GeminiService {
 		MessageResponseDTO messageResponseDTO = gson.fromJson(responseBody, MessageResponseDTO.class);
 		
 		return messageResponseDTO;
-	}
-	
-
-	public List<MessageTurn> getHistoric(HttpSession session) {
-        @SuppressWarnings("unchecked")
-		List<MessageTurn> historic = (List<MessageTurn>) session.getAttribute("chatHistoric");
-        
-        if (historic == null) {
-            return new ArrayList<>();
-        }
-        
-        return historic;
-    }
-	
-	public void saveHistoric(HttpSession session, List<MessageTurn> historic) {
-		session.setAttribute("chatHistoric", historic);
 	}
 }
