@@ -1,6 +1,5 @@
 package com.buthdev.demo.controllers;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,11 +26,7 @@ public class MessageController {
 	@GetMapping(value = "/send")
 	public ResponseEntity<String> callGemini(@RequestBody MessageDTO messageDTO, HttpSession session) {
 		
-		@SuppressWarnings("unchecked")
-		List<MessageTurn> historic = (List<MessageTurn>) session.getAttribute("chatHistoric");
-        if (historic == null) {
-            historic = new ArrayList<>();
-        }
+		List<MessageTurn> historic = geminiService.getHistoric(session);
 		
         MessageResponseDTO response = geminiService.callMessage(messageDTO.message(), historic);
         

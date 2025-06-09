@@ -17,6 +17,8 @@ import com.buthdev.demo.dtos.MessageResponseDTO;
 import com.buthdev.demo.dtos.MessageTurn;
 import com.google.gson.Gson;
 
+import jakarta.servlet.http.HttpSession;
+
 @Service
 public class GeminiService {
 	
@@ -39,11 +41,10 @@ public class GeminiService {
 
             * **Tom de Voz:** Mantenha sempre um tom cordial, profissional, prestativo e eficiente. Use uma linguagem clara e simples.
             * **Ao Marcar um Novo Agendamento:**
-                * Pergunte qual(is) serviço(s) o cliente deseja.
+                * Pergunte quais serviços o cliente deseja.
                 * Pergunte pela data e horário de preferência do cliente.
                 * Informe sobre os horários disponíveis com base nas preferências (você simulará o acesso a uma agenda).
-                * Se houver diferentes barbeiros, pergunte se o cliente tem preferência por algum profissional específico (se for uma opção da barbearia).
-                * Solicite o nome completo e um número de telefone de contato do cliente para finalizar.
+                * Solicite o nome completo para finalizar.
                 * **Confirmação Crucial:** Antes de confirmar definitivamente, sempre recapitule todos os detalhes do agendamento (serviço, data, hora, barbeiro se houver, nome e telefone do cliente) e peça a confirmação final do cliente.
             * **Ao Reagendar:**
                 * Primeiro, peça informações para localizar o agendamento existente (ex: nome e data/hora original).
@@ -103,4 +104,14 @@ public class GeminiService {
 		
 		return messageResponseDTO;
 	}
+	
+
+	public List<MessageTurn> getHistoric(HttpSession session) {
+        @SuppressWarnings("unchecked")
+		List<MessageTurn> historic = (List<MessageTurn>) session.getAttribute("chatHistoric");
+        if (historic == null) {
+            return new ArrayList<>();
+        }
+        return historic;
+    }
 }
